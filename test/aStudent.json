@@ -1,0 +1,24 @@
+{
+    "_id":"61a16d9ca905f6747b6a866c",
+    "id":{
+        "type":"CC",
+        "value":"98727272-2"
+    },
+    "name":{
+        "title":"Señor",
+        "first":"Jefferson",
+        "last":"Pena Torres"
+    },
+    "gender":"Masculino",
+    "email":"jefferson.amado.pena",
+    "type":"Student",
+    "phone":"221213123",
+    "cell":"221213123",
+    "nat":"COL",
+    "birth_date":"17-07-1990",
+    "picture":{
+        "large":"",
+        "medium":"",
+        "thumbnail":""
+    }
+}
