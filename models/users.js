@@ -32,4 +32,14 @@ const userSchema = new mgdbs.Schema({
     picture:pictureSchema
 });
 
-mgdbs.model("Users", userSchema);
+/**
+ * Check if model has been compiled
+ * @param {string} modelName
+ */
+const checkModel = function(modelName){
+    mgdbs.modelNames().indexOf(modelName) == -1
+    ? mgdbs.model(modelName, userSchema)
+    : mgdbs.connection.model(modelName)
+} 
+
+checkModel("Users")

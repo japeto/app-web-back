@@ -1,5 +1,7 @@
+const dotenv = require("dotenv").config();
+
 const msg = require("mongoose");
-msg.connect("mongodb://192.168.20.23:27017/unidad3", (err, db)=>{
+msg.connect(`mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`, (err, db)=>{
     if(err) throw err;
     console.log("success!! Database conected!")
 })

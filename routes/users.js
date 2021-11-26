@@ -22,8 +22,6 @@ router.route("/")
             req.body,
             (err, users)=>{
                 if(err) resp.json({"message": "people does not saved"});
-
-                console.log("saved ", users);
                 resp.json(users);
             }
         )
@@ -34,9 +32,11 @@ router.route("/:id")
        mgdb.model("Users").findById(req.params.id, (err, person)=>{
            if(err){
                console.log("There was a problem", err);
-           }else{
-               console.log("Retrieving id ", req.params.id);
+           }else if(person){
                resp.json(person)
+           }else{
+               resp.status(404)
+               resp.json({"message":"Not Found"})
            }
        })
    })
