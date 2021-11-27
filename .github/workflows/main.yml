@@ -11,17 +11,33 @@ on:
 jobs:
   ci:
     runs-on: ubuntu-latest
+
+    # runs all of the steps inside the specified container rather than on the VM host.  
+    # Because of this the network configuration changes from host based network to a container network
     container:
       image: node
+
+    services:
+      mongodb:
+        image: mongo
+        ports:
+          - 27017:27017
+
     steps:
       - uses: actions/checkout@v1
-      - name: Start Mongodb Container
-        run: docker run -d -p 27017:27017 mongo
       - name: Install and test
         run: |
           npm install
           npm test
-          
+        env:
+          # use mongodb for the host here because we have specified a container for the job.
+          # If we were running the job on the VM this would be localhost
+          APP_PORT: 5000
+          NODE_ENV: testing
+          DB_HOST: mongodb
+          DB_PORT: ${{ job.services.mongodb.ports[27017] }}
+          DB_NAME: ${{ secrets.DOCKER_USER }}
+
   cd:
     runs-on: ubuntu-latest
     needs: ci
