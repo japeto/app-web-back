@@ -5,7 +5,7 @@
   "main": "api.js",
   "scripts": {
     "start": "node api.js",
-    "test": "mocha",
+    "test": "mocha --exit",
     "server": "nodemon api.js"
   },
   "keywords": [],
