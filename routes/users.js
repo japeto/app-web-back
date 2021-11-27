@@ -13,7 +13,12 @@ router.use(express.urlencoded({extended:true}))
 router.route("/")
     .get((req, resp, next)=>{
         mgdb.model("Users").find({}, (err, users)=>{
-            if(err) throw err;
+            if(err){
+                resp.status(500);
+                resp.json({
+                    "message":"There was a problem "
+                })
+            }
             resp.json(users)
         })
     })
@@ -21,8 +26,18 @@ router.route("/")
         mgdb.model("Users").create(
             req.body,
             (err, users)=>{
-                if(err) resp.json({"message": "people does not saved"});
-                resp.json(users);
+                if(err){
+                    resp.status(500);
+                    resp.json({
+                        "message":"There was a problem "
+                    })
+                }
+                if(users){
+                    resp.json(users);
+                }else{
+                    resp.status(400)
+                    resp.json(users);
+                }
             }
         )
     });
@@ -31,7 +46,10 @@ router.route("/:id")
    .get(function(req, resp){
        mgdb.model("Users").findById(req.params.id, (err, person)=>{
            if(err){
-               console.log("There was a problem", err);
+                resp.status(500);
+                resp.json({
+                    "message":"There was a problem "
+                })
            }else if(person){
                resp.json(person)
            }else{
@@ -43,12 +61,14 @@ router.route("/:id")
    .put(function(req, resp){
        mgdb.model("Users").findById(req.params.id, (err, person)=>{
            if(err){
-               console.log("There was a problem ", err);
                resp.status(500);
                resp.json({"message":err});
            }else{
                person.updateOne(req.body, (err, peopleid)=>{
-                   if(err) console.log("There was a problem ", err)
+                   if(err){
+                       resp.status(500)
+                       resp.json({"message":"Error: Not has been updated."})
+                   }
                    resp.json({
                        "_id":person._id,
                        "message":"Has been updated."
@@ -60,14 +80,18 @@ router.route("/:id")
    .delete(function(req, resp){
         mgdb.model("Users").findById(req.params.id, (err, person)=>{
             if(err){
-                console.log("There was a problem ", err);
                 resp.status(500);
                 resp.json({
                     "message":"There was a problem "
                 })
             }else{
                 person.remove((err, people)=>{
-                    if(err) console.log("Does not remove");
+                    if(err) {
+                        resp.status(500);
+                        resp.json({
+                            "message":"There was a problem "
+                        })
+                    }
                     resp.json({
                         "message":"Has been deleted",
                         "people":person
